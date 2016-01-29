@@ -1,0 +1,104 @@
+import java.util.*;
+
+
+public class Player {
+	private int playerNum;
+	private ArrayList<String> frames;
+	private int playerScore;
+	public Player(int playerNum) {
+		setplayerNum(playerNum);
+		frames = new ArrayList<String>();
+		playerScore=0;
+	}
+
+	public int getplayerNum() {
+		return playerNum;
+	}
+
+	
+	public void setplayerNum(int playerNum) {
+		this.playerNum = playerNum;
+	}
+
+	
+	
+	public int getSpares() {
+		int numSpares = 0;
+		for(String frame : frames) {
+			if (frame.contains("/"))
+				numSpares ++;
+		}
+		return numSpares;
+	}
+	
+	public int getStrikes() {
+		int numStrikes = 0;
+		for(String frame : frames) {
+			if (frame.contains("X"))
+				numStrikes ++;
+		}
+		return numStrikes;
+	}
+	
+	private void addFrame(String frame) {
+		frames.add(frame);
+	}
+	
+	public void makeFrame(String[] data) {
+		for (String s : data){
+			addFrame(s);
+		}
+		}
+	
+	public int calculateTotal (){
+		int total = 0;
+		for(int i=(frames.size() - 1); i<=0; i--){
+			String s = frames.get(i);
+			if (s.equals("X")){
+				if ((frames.get(i + 1).equals("X")) && (frames.get(i + 2).equals("X"))){
+					total += 30;
+				}
+				else if (frames.get(i + 2).equals("X")){
+					total += 20 + Integer.parseInt(frames.get(i + 1));
+				}
+				else if (frames.get(i + 1).equals("X")){
+					total += 20 + Integer.parseInt(frames.get(i + 2));
+				}
+				else if (frames.get(i +1).equals(null) && (frames.get(i + 2).equals(null))){
+					total += 10;
+				}
+				else if ((frames.get(i +1).equals("X") && (frames.get(i + 2).equals(null))) || (frames.get(i + 2).equals("/"))){
+					total += 20;
+				}
+				else if (frames.get(i + 2).equals(null)){
+					total += 10 + Integer.parseInt(frames.get(i + 1));
+				}
+				else{
+					total += 10 + Integer.parseInt(frames.get(i + 1)) + Integer.parseInt(frames.get(i + 2));
+				}
+			}
+			else if (s.equals("/")){
+				if (frames.get(i +1).equals("X")){
+					total += 20;
+				}
+				else if (frames.get(i +1).equals(null)){
+					total += 10;
+				}
+				else{
+					total += 10 + Integer.parseInt(frames.get(i +1));
+				}
+			}
+			else{
+				total += Integer.parseInt(s);
+			}
+		}
+		return total;
+	}
+	
+	public void setplayerScore(int s){
+		playerScore = s;
+	}
+	public int getplayerScore(){
+		return playerScore;
+	}
+}
